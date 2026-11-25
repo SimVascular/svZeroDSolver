@@ -22,7 +22,8 @@ var searchData=
   ['and_20metrics_19',['Targets and Metrics',['../tuner_concepts.html#autotoc_md25',1,'']]],
   ['and_20termination_20',['Convergence and Termination',['../tuner_concepts.html#autotoc_md29',1,'']]],
   ['api_20reference_21',['svZeroDTuner API Reference',['../tuner_api.html',1,'']]],
-  ['architecture_22',['Architecture',['../developer_guide.html#autotoc_md0',1,'Architecture'],['../_g_u_i.html#autotoc_md9',1,'Architecture'],['../visualization.html#autotoc_md48',1,'Architecture']]],
-  ['assertions_2eh_23',['Assertions.h',['../_assertions_8h.html',1,'']]],
-  ['avg_5fnonlin_5fiter_24',['avg_nonlin_iter',['../class_integrator.html#a7406846602ad1644e25998ee3d901bdd',1,'Integrator']]]
+  ['append_22',['append',['../struct_convergence_history.html#ae5325827d040b569b4c2ffdb60d601f4',1,'ConvergenceHistory']]],
+  ['architecture_23',['Architecture',['../developer_guide.html#autotoc_md0',1,'Architecture'],['../_g_u_i.html#autotoc_md9',1,'Architecture'],['../visualization.html#autotoc_md48',1,'Architecture']]],
+  ['assertions_2eh_24',['Assertions.h',['../_assertions_8h.html',1,'']]],
+  ['avg_5fnonlin_5fiter_25',['avg_nonlin_iter',['../class_integrator.html#a7406846602ad1644e25998ee3d901bdd',1,'Integrator']]]
 ];

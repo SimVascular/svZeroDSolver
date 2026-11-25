@@ -38,7 +38,7 @@ var searchData=
   ['sim_5ftime_5fstep_5fsize_35',['sim_time_step_size',['../struct_simulation_parameters.html#a64ffd5a9fe5338f7471f918dd9237e39',1,'SimulationParameters']]],
   ['simulationparameters_36',['SimulationParameters',['../struct_simulation_parameters.html',1,'']]],
   ['simulationparameters_2eh_37',['SimulationParameters.h',['../_simulation_parameters_8h.html',1,'']]],
-  ['size_38',['size',['../class_parameter.html#a2574f0c3ad19e7b17d982dcda388f7a7',1,'Parameter']]],
+  ['size_38',['size',['../class_parameter.html#a2574f0c3ad19e7b17d982dcda388f7a7',1,'Parameter::size'],['../struct_convergence_history.html#ae44a88fe23e624090352685cebd8771a',1,'ConvergenceHistory::size()']]],
   ['solve_39',['solve',['../class_sparse_system.html#a5f292fe3a47e938a487eb89d0df0211a',1,'SparseSystem']]],
   ['solver_40',['Solver',['../class_solver.html',1,'Solver'],['../class_solver.html#aa9e68ab5310adf5606ac9f363c3cee1c',1,'Solver::Solver()']]],
   ['solver_41',['solver',['../class_sparse_system.html#aef37a5347e9b8b23a3cd6d24cd965ad7',1,'SparseSystem']]],

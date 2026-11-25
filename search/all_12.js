@@ -25,5 +25,6 @@ var searchData=
   ['profiling_22',['Profiling',['../developer_guide.html#autotoc_md7',1,'']]],
   ['pts_5fper_5fcycle_5f_23',['pts_per_cycle_',['../class_solver_interface.html#a76dfe805dc2bbaf10e611ca92236638c',1,'SolverInterface']]],
   ['pulmonary_20tree_20tuning_24',['Example 2: Multi-Outlet Pulmonary Tree Tuning',['../tuner_examples.html#autotoc_md36',1,'']]],
-  ['python_20entry_20points_25',['Python Entry Points',['../tuner_api.html#autotoc_md21',1,'']]]
+  ['push_5fback_25',['push_back',['../struct_convergence_history.html#ac958a9b4b784cee0021f78a1d442cfa6',1,'ConvergenceHistory']]],
+  ['python_20entry_20points_26',['Python Entry Points',['../tuner_api.html#autotoc_md21',1,'']]]
 ];

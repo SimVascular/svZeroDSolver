@@ -131,6 +131,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a0c0efb666ac941cf0d49c666b6356483"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the parameters of a block.  <br /></td></tr>
 <tr class="memitem:ad213408fb2b5e0433c29454bec9e6443" id="r_ad213408fb2b5e0433c29454bec9e6443"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad213408fb2b5e0433c29454bec9e6443">write_result_to_csv</a> (const std::string &amp;filename) const</td></tr>
 <tr class="memdesc:ad213408fb2b5e0433c29454bec9e6443"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the result to a csv file.  <br /></td></tr>
+<tr class="memitem:a538d6212af0617963b09c119dcfa719f" id="r_a538d6212af0617963b09c119dcfa719f"><td class="memItemLeft"><a class="el" href="struct_convergence_history.html">ConvergenceHistory</a>&#160;</td><td class="memItemRight"><a class="el" href="#a538d6212af0617963b09c119dcfa719f">get_convergence_history</a> () const</td></tr>
+<tr class="memdesc:a538d6212af0617963b09c119dcfa719f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the convergence history of the whole run.  <br /></td></tr>
+<tr class="memitem:a6e24995d1a8fa83b1577e821c2a8192e" id="r_a6e24995d1a8fa83b1577e821c2a8192e"><td class="memItemLeft">std::vector&lt; int &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a6e24995d1a8fa83b1577e821c2a8192e">get_nonlinear_iterations</a> () const</td></tr>
+<tr class="memdesc:a6e24995d1a8fa83b1577e821c2a8192e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of Newton iterations used in each time step.  <br /></td></tr>
+<tr class="memitem:a380861a0873b8dba0a5b724b235389bd" id="r_a380861a0873b8dba0a5b724b235389bd"><td class="memItemLeft">std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a380861a0873b8dba0a5b724b235389bd">get_step_residuals</a> () const</td></tr>
+<tr class="memdesc:a380861a0873b8dba0a5b724b235389bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the largest residual at the end of each time step.  <br /></td></tr>
+<tr class="memitem:a1fc1d25cc3d9510ffb5b9357e140a4ea" id="r_a1fc1d25cc3d9510ffb5b9357e140a4ea"><td class="memItemLeft">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a1fc1d25cc3d9510ffb5b9357e140a4ea">get_step_residual_equations</a> () const</td></tr>
+<tr class="memdesc:a1fc1d25cc3d9510ffb5b9357e140a4ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the equation holding the largest residual of each time step.  <br /></td></tr>
+<tr class="memitem:a1901d60649981a2fd832b00170bcfa36" id="r_a1901d60649981a2fd832b00170bcfa36"><td class="memItemLeft">std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a1901d60649981a2fd832b00170bcfa36">get_step_times</a> () const</td></tr>
+<tr class="memdesc:a1901d60649981a2fd832b00170bcfa36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the time at the start of each integration step.  <br /></td></tr>
+<tr class="memitem:a873b15fc633a04af094fa8c909401a71" id="r_a873b15fc633a04af094fa8c909401a71"><td class="memItemLeft">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a873b15fc633a04af094fa8c909401a71">get_step_phases</a> () const</td></tr>
+<tr class="memdesc:a873b15fc633a04af094fa8c909401a71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the phase each step belongs to.  <br /></td></tr>
+<tr class="memitem:ade7a683f038558a7a6c33713f0a9cb95" id="r_ade7a683f038558a7a6c33713f0a9cb95"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#ade7a683f038558a7a6c33713f0a9cb95">get_convergence_history_csv</a> () const</td></tr>
+<tr class="memdesc:ade7a683f038558a7a6c33713f0a9cb95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the convergence history as a csv encoded string.  <br /></td></tr>
+<tr class="memitem:a1d9ed3bc51bf75bd3e769c1ed4c5d7fa" id="r_a1d9ed3bc51bf75bd3e769c1ed4c5d7fa"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a1d9ed3bc51bf75bd3e769c1ed4c5d7fa">write_convergence_history_to_csv</a> (const std::string &amp;filename) const</td></tr>
+<tr class="memdesc:a1d9ed3bc51bf75bd3e769c1ed4c5d7fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the convergence history to a csv file.  <br /></td></tr>
+<tr class="memitem:a306131f428a0ce29447436f764b624b3" id="r_a306131f428a0ce29447436f764b624b3"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a306131f428a0ce29447436f764b624b3">output_convergence_history</a> () const</td></tr>
+<tr class="memdesc:a306131f428a0ce29447436f764b624b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the configuration asks for the convergence history to be written to a file.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class for running 0D simulations. </p>
@@ -162,6 +180,47 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a538d6212af0617963b09c119dcfa719f" name="a538d6212af0617963b09c119dcfa719f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a538d6212af0617963b09c119dcfa719f">&#9670;&#160;</a></span>get_convergence_history()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_convergence_history.html">ConvergenceHistory</a> Solver::get_convergence_history </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the convergence history of the whole run. </p>
+<p>The history starts with the steps of the steady initial condition (if one was computed) and continues with the steps of the transient simulation. Use <a class="el" href="#a873b15fc633a04af094fa8c909401a71" title="Get the phase each step belongs to.">get_step_phases()</a> to tell the two apart.</p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="struct_convergence_history.html" title="Convergence history of the non-linear iterations.">ConvergenceHistory</a> Per-step convergence history </dd></dl>
+
+</div>
+</div>
+<a id="ade7a683f038558a7a6c33713f0a9cb95" name="ade7a683f038558a7a6c33713f0a9cb95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade7a683f038558a7a6c33713f0a9cb95">&#9670;&#160;</a></span>get_convergence_history_csv()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Solver::get_convergence_history_csv </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the convergence history as a csv encoded string. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::string Convergence history </dd></dl>
+
+</div>
+</div>
 <a id="aebf2a9aa50d3e557fd8023863e690a8e" name="aebf2a9aa50d3e557fd8023863e690a8e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aebf2a9aa50d3e557fd8023863e690a8e">&#9670;&#160;</a></span>get_full_result()</h2>
 
@@ -179,6 +238,26 @@ Public Member Functions</h2></td></tr>
 
 <p>Get the full result as a csv encoded string. </p>
 <dl class="section return"><dt>Returns</dt><dd>std::string Result </dd></dl>
+
+</div>
+</div>
+<a id="a6e24995d1a8fa83b1577e821c2a8192e" name="a6e24995d1a8fa83b1577e821c2a8192e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e24995d1a8fa83b1577e821c2a8192e">&#9670;&#160;</a></span>get_nonlinear_iterations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; int &gt; Solver::get_nonlinear_iterations </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the number of Newton iterations used in each time step. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;int&gt; Newton iterations per time step </dd></dl>
 
 </div>
 </div>
@@ -234,6 +313,87 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a873b15fc633a04af094fa8c909401a71" name="a873b15fc633a04af094fa8c909401a71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a873b15fc633a04af094fa8c909401a71">&#9670;&#160;</a></span>get_step_phases()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; Solver::get_step_phases </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the phase each step belongs to. </p>
+<p>Either "steady_initial" for the steps of the steady initial condition or "transient" for the steps of the simulation itself.</p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;std::string&gt; Phase per time step </dd></dl>
+
+</div>
+</div>
+<a id="a1fc1d25cc3d9510ffb5b9357e140a4ea" name="a1fc1d25cc3d9510ffb5b9357e140a4ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fc1d25cc3d9510ffb5b9357e140a4ea">&#9670;&#160;</a></span>get_step_residual_equations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; Solver::get_step_residual_equations </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the equation holding the largest residual of each time step. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;std::string&gt; Equation name per time step </dd></dl>
+
+</div>
+</div>
+<a id="a380861a0873b8dba0a5b724b235389bd" name="a380861a0873b8dba0a5b724b235389bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a380861a0873b8dba0a5b724b235389bd">&#9670;&#160;</a></span>get_step_residuals()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; Solver::get_step_residuals </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the largest residual at the end of each time step. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;double&gt; Residual per time step </dd></dl>
+
+</div>
+</div>
+<a id="a1901d60649981a2fd832b00170bcfa36" name="a1901d60649981a2fd832b00170bcfa36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1901d60649981a2fd832b00170bcfa36">&#9670;&#160;</a></span>get_step_times()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; Solver::get_step_times </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the time at the start of each integration step. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;double&gt; Time per time step </dd></dl>
+
+</div>
+</div>
 <a id="ac12a4bb26d17f412029796323eaf8070" name="ac12a4bb26d17f412029796323eaf8070"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac12a4bb26d17f412029796323eaf8070">&#9670;&#160;</a></span>get_times()</h2>
 
@@ -251,6 +411,26 @@ Public Member Functions</h2></td></tr>
 
 <p>Get the time steps of the result. </p>
 <dl class="section return"><dt>Returns</dt><dd>std::vector&lt;double&gt; Vector of times </dd></dl>
+
+</div>
+</div>
+<a id="a306131f428a0ce29447436f764b624b3" name="a306131f428a0ce29447436f764b624b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a306131f428a0ce29447436f764b624b3">&#9670;&#160;</a></span>output_convergence_history()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Solver::output_convergence_history </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Whether the configuration asks for the convergence history to be written to a file. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if <span class="tt">simulation_parameters.output_convergence_history</span> is set </dd></dl>
 
 </div>
 </div>
@@ -380,6 +560,31 @@ Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">block_name</td><td>Name of the block </td></tr>
     <tr><td class="paramname">new_params</td><td>New parameters </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1d9ed3bc51bf75bd3e769c1ed4c5d7fa" name="a1d9ed3bc51bf75bd3e769c1ed4c5d7fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d9ed3bc51bf75bd3e769c1ed4c5d7fa">&#9670;&#160;</a></span>write_convergence_history_to_csv()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Solver::write_convergence_history_to_csv </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>filename</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Write the convergence history to a csv file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td></td></tr>
   </table>
   </dd>
 </dl>

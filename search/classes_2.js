@@ -7,5 +7,6 @@ var searchData=
   ['closedloopcoronaryleftbc_4',['ClosedLoopCoronaryLeftBC',['../class_closed_loop_coronary_left_b_c.html',1,'']]],
   ['closedloopcoronaryrightbc_5',['ClosedLoopCoronaryRightBC',['../class_closed_loop_coronary_right_b_c.html',1,'']]],
   ['closedloopheartpulmonary_6',['ClosedLoopHeartPulmonary',['../class_closed_loop_heart_pulmonary.html',1,'']]],
-  ['closedlooprcrbc_7',['ClosedLoopRCRBC',['../class_closed_loop_r_c_r_b_c.html',1,'']]]
+  ['closedlooprcrbc_7',['ClosedLoopRCRBC',['../class_closed_loop_r_c_r_b_c.html',1,'']]],
+  ['convergencehistory_8',['ConvergenceHistory',['../struct_convergence_history.html',1,'']]]
 ];

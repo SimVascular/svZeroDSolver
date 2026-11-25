@@ -14,5 +14,6 @@ var searchData=
   ['is_5fconstant_11',['is_constant',['../class_parameter.html#ad9b65a1bb5095a9838d052e251f90ebf',1,'Parameter']]],
   ['is_5fnumber_12',['is_number',['../struct_input_parameter.html#aa8ff4bcbc244608a53a21c74ee0ec39c',1,'InputParameter']]],
   ['is_5foptional_13',['is_optional',['../struct_input_parameter.html#aebb43b4cd77daade78f5ed431220e1d8',1,'InputParameter']]],
-  ['is_5fperiodic_14',['is_periodic',['../class_parameter.html#ab8f83f1250a623d59c74b225817f2b16',1,'Parameter']]]
+  ['is_5fperiodic_14',['is_periodic',['../class_parameter.html#ab8f83f1250a623d59c74b225817f2b16',1,'Parameter']]],
+  ['iterations_15',['iterations',['../struct_convergence_history.html#ab923de57c5a5ecc5b1f7c33578dd4969',1,'ConvergenceHistory']]]
 ];

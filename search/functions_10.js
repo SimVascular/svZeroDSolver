@@ -17,12 +17,13 @@ var searchData=
   ['setup_5fmodel_5fdependent_5fparams_14',['setup_model_dependent_params',['../class_block.html#a98bac8f1f93e2876efa7a7d59e302569',1,'Block::setup_model_dependent_params()'],['../class_closed_loop_coronary_b_c.html#aed2e8043da35b341319f9befc606505e',1,'ClosedLoopCoronaryBC::setup_model_dependent_params()'],['../class_closed_loop_coronary_left_b_c.html#a0f1a6e56b4d7ff90b1684e86b465a028',1,'ClosedLoopCoronaryLeftBC::setup_model_dependent_params()'],['../class_closed_loop_coronary_right_b_c.html#a7661ba0eb9cf4dd8b07b72cce75eab40',1,'ClosedLoopCoronaryRightBC::setup_model_dependent_params()']]],
   ['setup_5fparams_5f_15',['setup_params_',['../class_block.html#a08fb7d659427c235fc3f64ab0d042ea9',1,'Block']]],
   ['signal_5ftype_16',['signal_type',['../class_activation_function.html#aa03f54963105611bcb3cd58bc4a664e0',1,'ActivationFunction::signal_type()'],['../class_piecewise_rate_activation.html#aa134df79aa655e1baf58fd3e03f18a1e',1,'PiecewiseRateActivation::signal_type()']]],
-  ['solve_17',['solve',['../class_sparse_system.html#a5f292fe3a47e938a487eb89d0df0211a',1,'SparseSystem']]],
-  ['solver_18',['Solver',['../class_solver.html#aa9e68ab5310adf5606ac9f363c3cee1c',1,'Solver']]],
-  ['solverinterface_19',['SolverInterface',['../class_solver_interface.html#aff2a2c7596dd243309f32e2a717a6ed3',1,'SolverInterface']]],
-  ['sparsesystem_20',['SparseSystem',['../class_sparse_system.html#a563e7760b7e4e66ea6e26cfc3ebfc553',1,'SparseSystem::SparseSystem()'],['../class_sparse_system.html#a30fc6067ff64dff642f85a782d95d928',1,'SparseSystem::SparseSystem(int n)']]],
-  ['spherematerial_21',['SphereMaterial',['../class_sphere_material.html#a6641949a4a14f7bc15b4a2679b806778',1,'SphereMaterial']]],
-  ['state_22',['State',['../class_state.html#ab91bb1dd5aa6260ab2a456581daf9ec2',1,'State::State()'],['../class_state.html#acb29b7e6acb6ddac3bfe0629ef0e65b9',1,'State::State(int n)'],['../class_state.html#a5107a6d9c2cd2ae0da0a32c13b1e906f',1,'State::State(const State &amp;state)']]],
-  ['step_23',['step',['../class_integrator.html#a14f39fb28ea119b053932b265cc6b035',1,'Integrator']]],
-  ['svzerod_5feigen_5fassertion_5ffailed_24',['svzerod_eigen_assertion_failed',['../_assertions_8h.html#a7300c2060c408de597260b8100a765c5',1,'Assertions.h']]]
+  ['size_17',['size',['../struct_convergence_history.html#ae44a88fe23e624090352685cebd8771a',1,'ConvergenceHistory']]],
+  ['solve_18',['solve',['../class_sparse_system.html#a5f292fe3a47e938a487eb89d0df0211a',1,'SparseSystem']]],
+  ['solver_19',['Solver',['../class_solver.html#aa9e68ab5310adf5606ac9f363c3cee1c',1,'Solver']]],
+  ['solverinterface_20',['SolverInterface',['../class_solver_interface.html#aff2a2c7596dd243309f32e2a717a6ed3',1,'SolverInterface']]],
+  ['sparsesystem_21',['SparseSystem',['../class_sparse_system.html#a563e7760b7e4e66ea6e26cfc3ebfc553',1,'SparseSystem::SparseSystem()'],['../class_sparse_system.html#a30fc6067ff64dff642f85a782d95d928',1,'SparseSystem::SparseSystem(int n)']]],
+  ['spherematerial_22',['SphereMaterial',['../class_sphere_material.html#a6641949a4a14f7bc15b4a2679b806778',1,'SphereMaterial']]],
+  ['state_23',['State',['../class_state.html#ab91bb1dd5aa6260ab2a456581daf9ec2',1,'State::State()'],['../class_state.html#acb29b7e6acb6ddac3bfe0629ef0e65b9',1,'State::State(int n)'],['../class_state.html#a5107a6d9c2cd2ae0da0a32c13b1e906f',1,'State::State(const State &amp;state)']]],
+  ['step_24',['step',['../class_integrator.html#a14f39fb28ea119b053932b265cc6b035',1,'Integrator']]],
+  ['svzerod_5feigen_5fassertion_5ffailed_25',['svzerod_eigen_assertion_failed',['../_assertions_8h.html#a7300c2060c408de597260b8100a765c5',1,'Assertions.h']]]
 ];

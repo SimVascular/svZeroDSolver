@@ -159,6 +159,27 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(pybind11_json)
 
 # -----------------------------------------------------------------------------
+# Fetch ExprTk
+# -----------------------------------------------------------------------------
+# ExprTk is a header-only mathematical expression parser used by Parameter to
+# evaluate time-dependent parameters given as expression strings (e.g. a FLOW
+# boundary condition's "Q": "sin(2*pi*t)"). The repository has no CMake
+# support, so we only download it and expose the header through an INTERFACE
+# target. Pinned to the 2025-01-01 release commit (it has no tag).
+#
+FetchContent_Declare(
+    exprtk
+    URL      https://github.com/ArashPartow/exprtk/archive/1e4a80b5ec9b4832ed59c6faa65f625a01b18ef0.tar.gz
+    URL_HASH SHA256=43eaf07fe52ab22f3d5b3726151a0ba34d3e2131f3b290b3bedd04aa0fe28011
+)
+
+FetchContent_MakeAvailable(exprtk)
+
+add_library(exprtk INTERFACE)
+add_library(exprtk::exprtk ALIAS exprtk)
+target_include_directories(exprtk SYSTEM INTERFACE ${exprtk_SOURCE_DIR})
+
+# -----------------------------------------------------------------------------
 # Set executables for each application.
 # -----------------------------------------------------------------------------
 # There are two executables

@@ -3,6 +3,8 @@
 
 #include "Integrator.h"
 
+#include <sstream>
+
 Integrator::Integrator(Model* model, double time_step_size, double rho,
                        double atol, int max_iter,
                        bool max_iter_error_to_warning) {
@@ -52,6 +54,21 @@ void Integrator::update_params(double time_step_size) {
   model->update_time(system, 0.0);
 }
 
+void Integrator::evaluate_residual(const State& old_state,
+                                   const State& new_state) {
+  // Initiator: Evaluate the iterates at the intermediate time levels
+  ydot_am.setZero();
+  y_af.setZero();
+  ydot_am += old_state.ydot + (new_state.ydot - old_state.ydot) * alpha_m;
+  y_af += old_state.y + (new_state.y - old_state.y) * alpha_f;
+
+  // Update solution-dependent element contribitions
+  model->update_solution(system, y_af, ydot_am);
+
+  // Evaluate residual
+  system.update_residual(y_af, ydot_am);
+}
+
 State Integrator::step(const State& old_state, double time) {
   // Predictor: Constant y, consistent ydot
   State new_state = State::Zero(size);
@@ -67,36 +84,22 @@ State Integrator::step(const State& old_state, double time) {
   // Count total number of step calls
   n_iter++;
 
+  // Convergence history of this step
+  int iter_this_step = 0;
+  double res_this_step = 0.0;
+  Eigen::Index res_dof_this_step = 0;
+  bool converged = false;
+
   // Non-linear Newton-Raphson iterations
-  for (size_t i = 0; i < max_iter; i++) {
-    // Initiator: Evaluate the iterates at the intermediate time levels
-    ydot_am.setZero();
-    y_af.setZero();
-    ydot_am += old_state.ydot + (new_state.ydot - old_state.ydot) * alpha_m;
-    y_af += old_state.y + (new_state.y - old_state.y) * alpha_f;
-
-    // Update solution-dependent element contribitions
-    model->update_solution(system, y_af, ydot_am);
-
-    // Evaluate residual
-    system.update_residual(y_af, ydot_am);
+  for (int i = 0; i < max_iter; i++) {
+    // Evaluate the residual of the current iterate
+    evaluate_residual(old_state, new_state);
+    res_this_step = system.residual.cwiseAbs().maxCoeff(&res_dof_this_step);
 
     // Check termination criterium
-    if (system.residual.cwiseAbs().maxCoeff() < atol) {
+    if (res_this_step < atol) {
+      converged = true;
       break;
-    }
-
-    // Abort if maximum number of non-linear iterations is reached
-    else if (i == max_iter - 1) {
-      if (max_iter_error_to_warning) {
-        std::cout << "Warning: Maximum number of non-linear iterations reached "
-                     "at time "
-                  << time << std::endl;
-      } else {
-        throw std::runtime_error(
-            "Maximum number of non-linear iterations reached at time " +
-            std::to_string(time));
-      }
     }
 
     // Evaluate Jacobian
@@ -114,6 +117,34 @@ State Integrator::step(const State& old_state, double time) {
 
     // Count total number of nonlinear iterations
     n_nonlin_iter++;
+    iter_this_step++;
+  }
+
+  // The loop above leaves the update of its last iteration unchecked. Evaluate
+  // the residual once more so that the recorded residual always belongs to the
+  // state that is returned, and so that a step that converged with that last
+  // update is not reported as a failure.
+  if (!converged) {
+    evaluate_residual(old_state, new_state);
+    res_this_step = system.residual.cwiseAbs().maxCoeff(&res_dof_this_step);
+    converged = res_this_step < atol;
+  }
+
+  // Record how hard this step was to solve
+  history.push_back(time, iter_this_step, res_this_step,
+                    static_cast<int>(res_dof_this_step));
+
+  // Abort if the maximum number of non-linear iterations was not enough
+  if (!converged) {
+    std::ostringstream message;
+    message << "Maximum number of non-linear iterations reached at time "
+            << time << " (residual " << std::scientific << res_this_step << ")";
+
+    if (max_iter_error_to_warning) {
+      std::cout << "Warning: " << message.str() << std::endl;
+    } else {
+      throw std::runtime_error(message.str());
+    }
   }
 
   // Fill the post-processing variables from the converged state

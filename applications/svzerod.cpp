@@ -34,6 +34,20 @@ PYBIND11_MODULE(svzerod, m) {
       .def("get_single_result_avg", &Solver::get_single_result_avg)
       .def("update_block_params", &Solver::update_block_params)
       .def("read_block_params", &Solver::read_block_params)
+      .def("get_nonlinear_iterations", &Solver::get_nonlinear_iterations)
+      .def("get_step_residuals", &Solver::get_step_residuals)
+      .def("get_step_residual_equations", &Solver::get_step_residual_equations)
+      .def("get_step_times", &Solver::get_step_times)
+      .def("get_step_phases", &Solver::get_step_phases)
+      .def("write_convergence_history_to_csv",
+           &Solver::write_convergence_history_to_csv)
+      .def("get_convergence_history",
+           [](Solver& solver) {
+             py::module_ pd = py::module_::import("pandas");
+             py::module_ io = py::module_::import("io");
+             auto result = solver.get_convergence_history_csv();
+             return pd.attr("read_csv")(io.attr("StringIO")(result));
+           })
       .def("get_full_result", [](Solver& solver) {
         py::module_ pd = py::module_::import("pandas");
         py::module_ io = py::module_::import("io");
@@ -75,6 +89,11 @@ PYBIND11_MODULE(svzerod, m) {
     auto solver = Solver(config);
     solver.run();
     solver.write_result_to_csv(argv[2]);
+
+    if (solver.output_convergence_history()) {
+      solver.write_convergence_history_to_csv(
+          convergence_history_filename(argv[2]));
+    }
   });
   m.def("run_calibration_cli", []() {
     py::module_ sys = py::module_::import("sys");

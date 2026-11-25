@@ -20,6 +20,7 @@
  * 3. (Optional) Solve for steady initial condition
  * 4. Run simulation
  * 5. Write output to file
+ * 6. (Optional) Write the Newton convergence history to file
  *
  * @param argc Number of command line arguments
  * @param argv Command line arguments
@@ -93,6 +94,15 @@ int main(int argc, char* argv[]) {
     auto solver = Solver(config);
     solver.run();
     solver.write_result_to_csv(output_file_name);
+
+    // Optionally report how many Newton iterations each time step took
+    if (solver.output_convergence_history()) {
+      const std::string history_file_name =
+          convergence_history_filename(output_file_name);
+      solver.write_convergence_history_to_csv(history_file_name);
+      std::cout << "[svzerodsolver] Convergence history written to '"
+                << history_file_name << "'." << std::endl;
+    }
   } catch (const std::exception& e) {
     std::cerr << "[svzerodsolver] Error: " << e.what() << std::endl;
     return 1;

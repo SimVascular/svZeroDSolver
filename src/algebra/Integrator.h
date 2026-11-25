@@ -8,9 +8,72 @@
 #define SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_
 
 #include <Eigen/Dense>
+#include <vector>
 
 #include "Model.h"
 #include "State.h"
+
+/**
+ * @brief Convergence history of the non-linear iterations
+ *
+ * Holds one entry per time step: the time at the start of the step, the
+ * number of Newton updates it took, the largest absolute residual left in
+ * the solution of that step and the degree of freedom that holds it.
+ */
+struct ConvergenceHistory {
+  std::vector<double> time;       ///< Time at the start of the step
+  std::vector<int> iterations;    ///< Newton iterations of the step
+  std::vector<double> residual;   ///< Largest absolute residual left
+  std::vector<int> residual_dof;  ///< DOF index holding that residual
+
+  /**
+   * @brief Record one time step
+   *
+   * @param step_time Time at the start of the step
+   * @param step_iterations Number of Newton updates performed
+   * @param step_residual Largest absolute residual left
+   * @param step_residual_dof DOF index holding that residual
+   */
+  void push_back(double step_time, int step_iterations, double step_residual,
+                 int step_residual_dof) {
+    time.push_back(step_time);
+    iterations.push_back(step_iterations);
+    residual.push_back(step_residual);
+    residual_dof.push_back(step_residual_dof);
+  }
+
+  /**
+   * @brief Append another history at the end of this one
+   *
+   * @param other History to append
+   */
+  void append(const ConvergenceHistory& other) {
+    time.insert(time.end(), other.time.begin(), other.time.end());
+    iterations.insert(iterations.end(), other.iterations.begin(),
+                      other.iterations.end());
+    residual.insert(residual.end(), other.residual.begin(),
+                    other.residual.end());
+    residual_dof.insert(residual_dof.end(), other.residual_dof.begin(),
+                        other.residual_dof.end());
+  }
+
+  /**
+   * @brief Discard all recorded time steps
+   */
+  void clear() {
+    time.clear();
+    iterations.clear();
+    residual.clear();
+    residual_dof.clear();
+  }
+
+  /**
+   * @brief Number of recorded time steps
+   *
+   * @return Number of recorded time steps
+   */
+  size_t size() const { return time.size(); }
+};
 
 /**
  * @brief Generalized-alpha integrator
@@ -39,10 +102,22 @@ class Integrator {
   int num_equations{0};  ///< Size of the non-linear system that is solved
   int n_iter{0};
   int n_nonlin_iter{0};
+  ConvergenceHistory history;  ///< Per-step convergence history
   Eigen::Matrix<double, Eigen::Dynamic, 1> y_af;
   Eigen::Matrix<double, Eigen::Dynamic, 1> ydot_am;
   SparseSystem system;
   Model* model{nullptr};
+
+  /**
+   * @brief Evaluate the residual of the current iterate
+   *
+   * Interpolates the iterates to the generalized mid-point, updates the
+   * solution-dependent element contributions and assembles the residual.
+   *
+   * @param old_state State at the beginning of the time step
+   * @param new_state Current iterate
+   */
+  void evaluate_residual(const State& old_state, const State& new_state);
 
  public:
   /**
@@ -101,6 +176,13 @@ class Integrator {
    *
    */
   double avg_nonlin_iter();
+
+  /**
+   * @brief Convergence history of all time steps performed so far
+   *
+   * @return Per-step convergence history
+   */
+  const ConvergenceHistory& get_history() const { return history; }
 };
 
 #endif  // SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_
